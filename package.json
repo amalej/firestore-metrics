@@ -1,0 +1,21 @@
+{
+  "name": "firestore-monitoring",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "build:watch": "tsc --watch"
+  },
+  "author": "Alejandro Marco Alejandre",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^20.4.4",
+    "install": "^0.13.0",
+    "typescript": "^5.1.6",
+    "typescriptnpm": "^1.0.1"
+  },
+  "dependencies": {
+    "google-auth-library": "^9.0.0"
+  }
+}

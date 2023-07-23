@@ -1,4 +1,4 @@
-# Firestore Monitoring JS
+# Firestore Metrics
 
 This is a library which uses the [Cloud Monitoring API v3](https://cloud.google.com/monitoring/api/ref_v3/rest/v3/projects.timeSeries/list) to view Firestore usage metrics.
 
@@ -12,14 +12,14 @@ This is a library which uses the [Cloud Monitoring API v3](https://cloud.google.
 
 1. Create a service account
 1. Download the service account credentials
-1. Pass the path to the service account in `FirestoreMonitoring`
+1. Pass the path to the service account in `FirestoreMetrics`
 
 ```js
 async function testApi() {
-  const firestoreMonitoring = new FirestoreMonitoring({
+  const firestoreMetrics = new FirestoreMetrics({
     serviceAccountPath: "../service-account.json",
   });
-  const readUsage = await firestoreMonitoring.getFirestoreReadCount(
+  const readUsage = await firestoreMetrics.getFirestoreReadCount(
     "2023-07-22T08:00:00Z",
     "2023-07-22T22:42:15Z"
   );

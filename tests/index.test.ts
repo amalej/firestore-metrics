@@ -1,4 +1,4 @@
-import { FirestoreMonitoring } from "../src/index";
+import { FirestoreMetrics } from "../src/index";
 import { existsSync } from "fs";
 
 describe("testing index file", () => {
@@ -17,12 +17,12 @@ describe("testing index file", () => {
     return;
   }
 
-  const firestoreMonitoring = new FirestoreMonitoring({
+  const firestoreMetrics = new FirestoreMetrics({
     serviceAccountPath: pathToServiceAccount,
   });
 
   test("Read Firestore count must return a 200 response.", async () => {
-    const readCountData = await firestoreMonitoring.getFirestoreReadCount(
+    const readCountData = await firestoreMetrics.getFirestoreReadCount(
       "2023-07-22T08:00:00Z",
       "2023-07-22T22:42:15Z"
     );
@@ -31,7 +31,7 @@ describe("testing index file", () => {
   });
 
   test("Write Firestore count must return a 200 response.", async () => {
-    const readCountData = await firestoreMonitoring.getFirestoreWriteCount(
+    const readCountData = await firestoreMetrics.getFirestoreWriteCount(
       "2023-07-22T08:00:00Z",
       "2023-07-22T22:42:15Z"
     );
@@ -40,7 +40,7 @@ describe("testing index file", () => {
   });
 
   test("Delete Firestore count must return a 200 response.", async () => {
-    const readCountData = await firestoreMonitoring.getFirestoreDeleteCount(
+    const readCountData = await firestoreMetrics.getFirestoreDeleteCount(
       "2023-07-22T08:00:00Z",
       "2023-07-22T22:42:15Z"
     );
@@ -50,7 +50,7 @@ describe("testing index file", () => {
 
   test("Active connections count must return a 200 response.", async () => {
     const readCountData =
-      await firestoreMonitoring.getFirestoreActiveConnections(
+      await firestoreMetrics.getFirestoreActiveConnections(
         "2023-07-22T08:00:00Z",
         "2023-07-22T22:42:15Z"
       );
@@ -60,7 +60,7 @@ describe("testing index file", () => {
 
   test("Snapshot listener count must return a 200 response.", async () => {
     const readCountData =
-      await firestoreMonitoring.getFirestoreSnapshotListeners(
+      await firestoreMetrics.getFirestoreSnapshotListeners(
         "2023-07-22T08:00:00Z",
         "2023-07-22T22:42:15Z"
       );

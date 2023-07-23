@@ -38,7 +38,7 @@ interface ProjectConfigs {
   projectId?: string | null;
 }
 
-export interface FirestoreMonitoringResponse {
+export interface FirestoreMetricsResponse {
   status: number;
   statusText: string;
   data: Array<TimeIntervalMetric>;
@@ -49,7 +49,7 @@ type MetricType = "QUERY" | "LOOK_UP" | string;
 export type DateTimeStringISO =
   `${number}-${number}-${number}T${number}:${number}:${number}Z`;
 
-export class FirestoreMonitoring {
+export class FirestoreMetrics {
   serviceAccountPath: string;
   projectId: string;
   accessToken: string | null = null;
@@ -168,13 +168,13 @@ export class FirestoreMonitoring {
    * @param {string} startTime The beginning of the time interval.
    * @param {string} endTime The end of the time interval.
    * @param {string?} accessToken Access token used to authenticate.
-   * @returns {Promise<FirestoreMonitoringResponse>}
+   * @returns {Promise<FirestoreMetricsResponse>}
    */
   async getFirestoreReadCount(
     startTime: DateTimeStringISO,
     endTime: DateTimeStringISO,
     accessToken: string | null = null
-  ): Promise<FirestoreMonitoringResponse> {
+  ): Promise<FirestoreMetricsResponse> {
     if (accessToken === null) {
       await this.generateToken();
     }
@@ -193,13 +193,13 @@ export class FirestoreMonitoring {
    * @param {string} startTime The beginning of the time interval.
    * @param {string} endTime The end of the time interval.
    * @param {string?} accessToken Access token used to authenticate.
-   * @returns {Promise<FirestoreMonitoringResponse>}
+   * @returns {Promise<FirestoreMetricsResponse>}
    */
   async getFirestoreWriteCount(
     startTime: DateTimeStringISO,
     endTime: DateTimeStringISO,
     accessToken: string | null = null
-  ): Promise<FirestoreMonitoringResponse> {
+  ): Promise<FirestoreMetricsResponse> {
     if (accessToken === null) {
       await this.generateToken();
     }
@@ -218,13 +218,13 @@ export class FirestoreMonitoring {
    * @param {string} startTime The beginning of the time interval.
    * @param {string} endTime The end of the time interval.
    * @param {string?} accessToken Access token used to authenticate.
-   * @returns {Promise<FirestoreMonitoringResponse>}
+   * @returns {Promise<FirestoreMetricsResponse>}
    */
   async getFirestoreDeleteCount(
     startTime: DateTimeStringISO,
     endTime: DateTimeStringISO,
     accessToken: string | null = null
-  ): Promise<FirestoreMonitoringResponse> {
+  ): Promise<FirestoreMetricsResponse> {
     if (accessToken === null) {
       await this.generateToken();
     }
@@ -243,13 +243,13 @@ export class FirestoreMonitoring {
    * @param {string} startTime The beginning of the time interval.
    * @param {string} endTime The end of the time interval.
    * @param {string?} accessToken Access token used to authenticate.
-   * @returns {Promise<FirestoreMonitoringResponse>}
+   * @returns {Promise<FirestoreMetricsResponse>}
    */
   async getFirestoreSnapshotListeners(
     startTime: DateTimeStringISO,
     endTime: DateTimeStringISO,
     accessToken: string | null = null
-  ): Promise<FirestoreMonitoringResponse> {
+  ): Promise<FirestoreMetricsResponse> {
     if (accessToken === null) {
       await this.generateToken();
     }
@@ -268,13 +268,13 @@ export class FirestoreMonitoring {
    * @param {string} startTime The beginning of the time interval.
    * @param {string} endTime The end of the time interval.
    * @param {string?} accessToken Access token used to authenticate.
-   * @returns {Promise<FirestoreMonitoringResponse>}
+   * @returns {Promise<FirestoreMetricsResponse>}
    */
   async getFirestoreActiveConnections(
     startTime: DateTimeStringISO,
     endTime: DateTimeStringISO,
     accessToken: string | null = null
-  ): Promise<FirestoreMonitoringResponse> {
+  ): Promise<FirestoreMetricsResponse> {
     if (accessToken === null) {
       await this.generateToken();
     }

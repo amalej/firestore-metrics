@@ -1,13 +1,21 @@
 {
   "name": "firestore-monitoring",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "A library which uses the Cloud Monitoring API v3 to view Firestore metrics.",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/amalej/firestore-monitoring"
+  },
   "scripts": {
     "build": "tsc",
     "build:watch": "tsc --watch",
     "test": "jest"
   },
+  "files": [
+    "dist"
+  ],
   "author": "Alejandro Marco Alejandre",
   "license": "ISC",
   "devDependencies": {

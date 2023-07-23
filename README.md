@@ -1,4 +1,5 @@
-# Firestore Metrics
+# Firestore Metrics [![npm](https://img.shields.io/npm/v/firestore-metrics)](https://www.npmjs.com/package/firestore-metrics)
+
 
 This is a library which uses the [Cloud Monitoring API v3](https://cloud.google.com/monitoring/api/ref_v3/rest/v3/projects.timeSeries/list) to view Firestore usage metrics.
 

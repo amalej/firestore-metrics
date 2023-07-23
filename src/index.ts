@@ -23,14 +23,14 @@ interface Point {
   };
 }
 
-interface Interval {
+export interface Interval {
   startTime: string;
   endTime: string;
 }
 
-interface TimeIntervalMetric {
+export interface TimeIntervalMetric {
   interval: Interval;
-  count: string;
+  count: number;
 }
 
 interface ProjectConfigs {
@@ -152,7 +152,7 @@ export class FirestoreMonitoring {
           }
           const pointMetric: TimeIntervalMetric = {
             interval: point.interval,
-            count: point.value.int64Value,
+            count: parseInt(point.value.int64Value),
           };
           startTimes.push(pointMetric.interval.startTime);
           cleanTimeSeries.push(pointMetric);

@@ -1,5 +1,5 @@
 {
-  "name": "firestore-monitoring-test",
+  "name": "firestore-monitoring",
   "version": "1.0.0",
   "description": "A library which uses the Cloud Monitoring API v3 to view Firestore metrics.",
   "main": "dist/index.js",

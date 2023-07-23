@@ -164,7 +164,7 @@ export class FirestoreMetrics {
   }
 
   /**
-   *
+   * Get Firestore read count metrics.
    * @param {DateTimeStringISO} startTime The beginning of the time interval.
    * @param {DateTimeStringISO} endTime The end of the time interval.
    * @param {string?} accessToken Access token used to authenticate.
@@ -189,7 +189,7 @@ export class FirestoreMetrics {
   }
 
   /**
-   *
+   * Get Firestore write count metrics.
    * @param {DateTimeStringISO} startTime The beginning of the time interval.
    * @param {DateTimeStringISO} endTime The end of the time interval.
    * @param {string?} accessToken Access token used to authenticate.
@@ -214,7 +214,7 @@ export class FirestoreMetrics {
   }
 
   /**
-   *
+   * Get Firestore delete count metrics.
    * @param {DateTimeStringISO} startTime The beginning of the time interval.
    * @param {DateTimeStringISO} endTime The end of the time interval.
    * @param {string?} accessToken Access token used to authenticate.
@@ -239,7 +239,7 @@ export class FirestoreMetrics {
   }
 
   /**
-   *
+   * Get Firestore snapshot listeners count metrics.
    * @param {DateTimeStringISO} startTime The beginning of the time interval.
    * @param {DateTimeStringISO} endTime The end of the time interval.
    * @param {string?} accessToken Access token used to authenticate.
@@ -264,7 +264,7 @@ export class FirestoreMetrics {
   }
 
   /**
-   *
+   * Get Firestore active connections count metrics.
    * @param {DateTimeStringISO} startTime The beginning of the time interval.
    * @param {DateTimeStringISO} endTime The end of the time interval.
    * @param {string?} accessToken Access token used to authenticate.

@@ -5,13 +5,17 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc",
-    "build:watch": "tsc --watch"
+    "build:watch": "tsc --watch",
+    "test": "jest"
   },
   "author": "Alejandro Marco Alejandre",
   "license": "ISC",
   "devDependencies": {
+    "@types/jest": "^29.5.3",
     "@types/node": "^20.4.4",
     "install": "^0.13.0",
+    "jest": "^29.6.1",
+    "ts-jest": "^29.1.1",
     "typescript": "^5.1.6",
     "typescriptnpm": "^1.0.1"
   },

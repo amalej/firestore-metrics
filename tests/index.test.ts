@@ -44,6 +44,9 @@ describe("testing index file", () => {
       "2023-07-22T22:42:15Z"
     );
     // API will respond with 403 when billing is not enabled on the project.
+    if (writeCountData.status === 403) {
+      console.log(writeCountData.status, writeCountData.statusText);
+    }
     expect(writeCountData.status).toBe(200);
   });
 
@@ -53,6 +56,9 @@ describe("testing index file", () => {
       "2023-07-22T22:42:15Z"
     );
     // API will respond with 403 when billing is not enabled on the project.
+    if (deleteCountData.status === 403) {
+      console.log(deleteCountData.status, deleteCountData.statusText);
+    }
     expect(deleteCountData.status).toBe(200);
   });
 
@@ -62,6 +68,9 @@ describe("testing index file", () => {
       "2023-07-22T22:42:15Z"
     );
     // API will respond with 403 when billing is not enabled on the project.
+    if (activeConnectionsCountData.status === 403) {
+      console.log(activeConnectionsCountData.status, activeConnectionsCountData.statusText);
+    }
     expect(activeConnectionsCountData.status).toBe(200);
   });
 
@@ -71,6 +80,9 @@ describe("testing index file", () => {
       "2023-07-22T22:42:15Z"
     );
     // API will respond with 403 when billing is not enabled on the project.
+    if (snapshotListenerCountData.status === 403) {
+      console.log(snapshotListenerCountData.status, snapshotListenerCountData.statusText);
+    }
     expect(snapshotListenerCountData.status).toBe(200);
   });
 });

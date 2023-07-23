@@ -165,8 +165,8 @@ export class FirestoreMetrics {
 
   /**
    *
-   * @param {string} startTime The beginning of the time interval.
-   * @param {string} endTime The end of the time interval.
+   * @param {DateTimeStringISO} startTime The beginning of the time interval.
+   * @param {DateTimeStringISO} endTime The end of the time interval.
    * @param {string?} accessToken Access token used to authenticate.
    * @returns {Promise<FirestoreMetricsResponse>}
    */
@@ -190,8 +190,8 @@ export class FirestoreMetrics {
 
   /**
    *
-   * @param {string} startTime The beginning of the time interval.
-   * @param {string} endTime The end of the time interval.
+   * @param {DateTimeStringISO} startTime The beginning of the time interval.
+   * @param {DateTimeStringISO} endTime The end of the time interval.
    * @param {string?} accessToken Access token used to authenticate.
    * @returns {Promise<FirestoreMetricsResponse>}
    */
@@ -215,8 +215,8 @@ export class FirestoreMetrics {
 
   /**
    *
-   * @param {string} startTime The beginning of the time interval.
-   * @param {string} endTime The end of the time interval.
+   * @param {DateTimeStringISO} startTime The beginning of the time interval.
+   * @param {DateTimeStringISO} endTime The end of the time interval.
    * @param {string?} accessToken Access token used to authenticate.
    * @returns {Promise<FirestoreMetricsResponse>}
    */
@@ -240,8 +240,8 @@ export class FirestoreMetrics {
 
   /**
    *
-   * @param {string} startTime The beginning of the time interval.
-   * @param {string} endTime The end of the time interval.
+   * @param {DateTimeStringISO} startTime The beginning of the time interval.
+   * @param {DateTimeStringISO} endTime The end of the time interval.
    * @param {string?} accessToken Access token used to authenticate.
    * @returns {Promise<FirestoreMetricsResponse>}
    */
@@ -265,8 +265,8 @@ export class FirestoreMetrics {
 
   /**
    *
-   * @param {string} startTime The beginning of the time interval.
-   * @param {string} endTime The end of the time interval.
+   * @param {DateTimeStringISO} startTime The beginning of the time interval.
+   * @param {DateTimeStringISO} endTime The end of the time interval.
    * @param {string?} accessToken Access token used to authenticate.
    * @returns {Promise<FirestoreMetricsResponse>}
    */

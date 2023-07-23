@@ -6,7 +6,8 @@ This is a library which uses the [Cloud Monitoring API v3](https://cloud.google.
 ## Pre-requisites
 
 1. Service account with permission to access the API.
-1. Project must be billing enabled
+   1. `Viewer` role should suffice.
+1. Project must be billing enabled.
    1. This might be more of a bug as requests that use the bearer token obtained from a service account results in a 403 error when the project is not billing enabled.
 
 ## How to use

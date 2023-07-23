@@ -199,7 +199,7 @@ export class FirestoreMonitoring {
     startTime: DateTimeStringISO,
     endTime: DateTimeStringISO,
     accessToken: string | null = null
-  ) {
+  ): Promise<FirestoreMonitoringResponse> {
     if (accessToken === null) {
       await this.generateToken();
     }
@@ -224,7 +224,7 @@ export class FirestoreMonitoring {
     startTime: DateTimeStringISO,
     endTime: DateTimeStringISO,
     accessToken: string | null = null
-  ) {
+  ): Promise<FirestoreMonitoringResponse> {
     if (accessToken === null) {
       await this.generateToken();
     }
@@ -249,7 +249,7 @@ export class FirestoreMonitoring {
     startTime: DateTimeStringISO,
     endTime: DateTimeStringISO,
     accessToken: string | null = null
-  ) {
+  ): Promise<FirestoreMonitoringResponse> {
     if (accessToken === null) {
       await this.generateToken();
     }
@@ -274,7 +274,7 @@ export class FirestoreMonitoring {
     startTime: DateTimeStringISO,
     endTime: DateTimeStringISO,
     accessToken: string | null = null
-  ) {
+  ): Promise<FirestoreMonitoringResponse> {
     if (accessToken === null) {
       await this.generateToken();
     }

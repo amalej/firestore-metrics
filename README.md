@@ -1,6 +1,5 @@
 # Firestore Metrics [![npm](https://img.shields.io/npm/v/firestore-metrics)](https://www.npmjs.com/package/firestore-metrics) [![npm](https://img.shields.io/npm/dt/firestore-metrics)](https://www.npmjs.com/package/firestore-metrics?activeTab=versions)
 
-
 This is a library which uses the [Cloud Monitoring API v3](https://cloud.google.com/monitoring/api/ref_v3/rest/v3/projects.timeSeries/list) to view Firestore usage metrics.
 
 ## Pre-requisites
@@ -17,9 +16,11 @@ This is a library which uses the [Cloud Monitoring API v3](https://cloud.google.
 1. Pass the path to the service account in `FirestoreMetrics`
 
 ```js
+import { FirestoreMetrics } from "../firestore-metrics";
+
 async function testApi() {
   const firestoreMetrics = new FirestoreMetrics({
-    serviceAccountPath: "../service-account.json",
+    serviceAccountPath: "./service-account.json",
   });
   const readUsage = await firestoreMetrics.getFirestoreReadCount(
     "2023-07-22T08:00:00Z",
@@ -35,38 +36,55 @@ testApi();
 Output would look like:
 
 ```json
-{
-  "status": 200,
-  "statusText": "OK",
-  "data": [
-    {
-      "interval": {
-        "startTime": "2023-07-22T21:37:00Z",
-        "endTime": "2023-07-22T21:38:00Z"
-      },
-      "count": "48"
+[
+  {
+    "interval": {
+      "startTime": "2023-07-22T21:37:00Z",
+      "endTime": "2023-07-22T21:38:00Z"
     },
-    {
-      "interval": {
-        "startTime": "2023-07-22T21:36:00Z",
-        "endTime": "2023-07-22T21:37:00Z"
-      },
-      "count": "25"
+    "count": 48
+  },
+  {
+    "interval": {
+      "startTime": "2023-07-22T21:36:00Z",
+      "endTime": "2023-07-22T21:37:00Z"
     },
-    {
-      "interval": {
-        "startTime": "2023-07-22T20:47:00Z",
-        "endTime": "2023-07-22T20:48:00Z"
-      },
-      "count": "28"
+    "count": 25
+  },
+  {
+    "interval": {
+      "startTime": "2023-07-22T20:48:00Z",
+      "endTime": "2023-07-22T20:49:00Z"
     },
-    {
-      "interval": {
-        "startTime": "2023-07-22T08:15:00Z",
-        "endTime": "2023-07-22T08:16:00Z"
-      },
-      "count": "14"
-    }
-  ]
-}
+    "count": 7
+  },
+  {
+    "interval": {
+      "startTime": "2023-07-22T20:47:00Z",
+      "endTime": "2023-07-22T20:48:00Z"
+    },
+    "count": 28
+  },
+  {
+    "interval": {
+      "startTime": "2023-07-22T16:04:00Z",
+      "endTime": "2023-07-22T16:05:00Z"
+    },
+    "count": 3
+  },
+  {
+    "interval": {
+      "startTime": "2023-07-22T16:03:00Z",
+      "endTime": "2023-07-22T16:04:00Z"
+    },
+    "count": 11
+  },
+  {
+    "interval": {
+      "startTime": "2023-07-22T08:15:00Z",
+      "endTime": "2023-07-22T08:16:00Z"
+    },
+    "count": 14
+  }
+]
 ```

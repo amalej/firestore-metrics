@@ -38,12 +38,6 @@ interface ProjectConfigs {
   projectId?: string | null;
 }
 
-export interface FirestoreMetricsResponse {
-  status: number;
-  statusText: string;
-  data: Array<TimeIntervalMetric>;
-}
-
 type MetricType = "QUERY" | "LOOK_UP" | string;
 
 export type DateTimeStringISO =
@@ -124,6 +118,11 @@ export class FirestoreMetrics {
       body: null,
       method: "GET",
     });
+    
+    if (response.status !== 200) {
+      const errMesage = await response.text();
+      throw Error(errMesage);
+    }
 
     return response;
   }
@@ -168,24 +167,20 @@ export class FirestoreMetrics {
    * @param {DateTimeStringISO} startTime The beginning of the time interval.
    * @param {DateTimeStringISO} endTime The end of the time interval.
    * @param {string?} accessToken Access token used to authenticate.
-   * @returns {Promise<FirestoreMetricsResponse>}
+   * @returns {Promise<Array<TimeIntervalMetric>>}
    */
   async getFirestoreReadCount(
     startTime: DateTimeStringISO,
     endTime: DateTimeStringISO,
     accessToken: string | null = null
-  ): Promise<FirestoreMetricsResponse> {
+  ): Promise<Array<TimeIntervalMetric>> {
     if (accessToken === null) {
       await this.generateToken();
     }
     const filter = this.metricFilter("document/read_count");
     const res = await this.makeRequest(filter, startTime, endTime);
     const cleanTimeSeries = await this.cleanResponseTimeSeries(res);
-    return {
-      status: res.status,
-      statusText: res.statusText,
-      data: cleanTimeSeries,
-    };
+    return cleanTimeSeries;
   }
 
   /**
@@ -193,24 +188,20 @@ export class FirestoreMetrics {
    * @param {DateTimeStringISO} startTime The beginning of the time interval.
    * @param {DateTimeStringISO} endTime The end of the time interval.
    * @param {string?} accessToken Access token used to authenticate.
-   * @returns {Promise<FirestoreMetricsResponse>}
+   * @returns {Promise<Array<TimeIntervalMetric>>}
    */
   async getFirestoreWriteCount(
     startTime: DateTimeStringISO,
     endTime: DateTimeStringISO,
     accessToken: string | null = null
-  ): Promise<FirestoreMetricsResponse> {
+  ): Promise<Array<TimeIntervalMetric>> {
     if (accessToken === null) {
       await this.generateToken();
     }
     const filter = this.metricFilter("document/write_count");
     const res = await this.makeRequest(filter, startTime, endTime);
     const cleanTimeSeries = await this.cleanResponseTimeSeries(res);
-    return {
-      status: res.status,
-      statusText: res.statusText,
-      data: cleanTimeSeries,
-    };
+    return cleanTimeSeries;
   }
 
   /**
@@ -218,24 +209,20 @@ export class FirestoreMetrics {
    * @param {DateTimeStringISO} startTime The beginning of the time interval.
    * @param {DateTimeStringISO} endTime The end of the time interval.
    * @param {string?} accessToken Access token used to authenticate.
-   * @returns {Promise<FirestoreMetricsResponse>}
+   * @returns {Promise<Array<TimeIntervalMetric>>}
    */
   async getFirestoreDeleteCount(
     startTime: DateTimeStringISO,
     endTime: DateTimeStringISO,
     accessToken: string | null = null
-  ): Promise<FirestoreMetricsResponse> {
+  ): Promise<Array<TimeIntervalMetric>> {
     if (accessToken === null) {
       await this.generateToken();
     }
     const filter = this.metricFilter("document/delete_count");
     const res = await this.makeRequest(filter, startTime, endTime);
     const cleanTimeSeries = await this.cleanResponseTimeSeries(res);
-    return {
-      status: res.status,
-      statusText: res.statusText,
-      data: cleanTimeSeries,
-    };
+    return cleanTimeSeries;
   }
 
   /**
@@ -243,24 +230,20 @@ export class FirestoreMetrics {
    * @param {DateTimeStringISO} startTime The beginning of the time interval.
    * @param {DateTimeStringISO} endTime The end of the time interval.
    * @param {string?} accessToken Access token used to authenticate.
-   * @returns {Promise<FirestoreMetricsResponse>}
+   * @returns {Promise<Array<TimeIntervalMetric>>}
    */
   async getFirestoreSnapshotListeners(
     startTime: DateTimeStringISO,
     endTime: DateTimeStringISO,
     accessToken: string | null = null
-  ): Promise<FirestoreMetricsResponse> {
+  ): Promise<Array<TimeIntervalMetric>> {
     if (accessToken === null) {
       await this.generateToken();
     }
     const filter = this.metricFilter("network/snapshot_listeners");
     const res = await this.makeRequest(filter, startTime, endTime);
     const cleanTimeSeries = await this.cleanResponseTimeSeries(res);
-    return {
-      status: res.status,
-      statusText: res.statusText,
-      data: cleanTimeSeries,
-    };
+    return cleanTimeSeries;
   }
 
   /**
@@ -268,23 +251,19 @@ export class FirestoreMetrics {
    * @param {DateTimeStringISO} startTime The beginning of the time interval.
    * @param {DateTimeStringISO} endTime The end of the time interval.
    * @param {string?} accessToken Access token used to authenticate.
-   * @returns {Promise<FirestoreMetricsResponse>}
+   * @returns {Promise<Array<TimeIntervalMetric>>}
    */
   async getFirestoreActiveConnections(
     startTime: DateTimeStringISO,
     endTime: DateTimeStringISO,
     accessToken: string | null = null
-  ): Promise<FirestoreMetricsResponse> {
+  ): Promise<Array<TimeIntervalMetric>> {
     if (accessToken === null) {
       await this.generateToken();
     }
     const filter = this.metricFilter("network/active_connections");
     const res = await this.makeRequest(filter, startTime, endTime);
     const cleanTimeSeries = await this.cleanResponseTimeSeries(res);
-    return {
-      status: res.status,
-      statusText: res.statusText,
-      data: cleanTimeSeries,
-    };
+    return cleanTimeSeries;
   }
 }

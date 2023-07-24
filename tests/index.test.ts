@@ -31,11 +31,7 @@ describe("testing index file", () => {
       "2023-07-22T08:00:00Z",
       "2023-07-22T22:42:15Z"
     );
-    // API will respond with 403 when billing is not enabled on the project.
-    if (readCountData.status === 403) {
-      console.log(readCountData.status, readCountData.statusText);
-    }
-    expect(readCountData.status).toBe(200);
+    expect(Array.isArray(readCountData)).toBe(true);
   });
 
   test("Write Firestore count must return a 200 response.", async () => {
@@ -43,11 +39,7 @@ describe("testing index file", () => {
       "2023-07-22T08:00:00Z",
       "2023-07-22T22:42:15Z"
     );
-    // API will respond with 403 when billing is not enabled on the project.
-    if (writeCountData.status === 403) {
-      console.log(writeCountData.status, writeCountData.statusText);
-    }
-    expect(writeCountData.status).toBe(200);
+    expect(Array.isArray(writeCountData)).toBe(true);
   });
 
   test("Delete Firestore count must return a 200 response.", async () => {
@@ -55,34 +47,24 @@ describe("testing index file", () => {
       "2023-07-22T08:00:00Z",
       "2023-07-22T22:42:15Z"
     );
-    // API will respond with 403 when billing is not enabled on the project.
-    if (deleteCountData.status === 403) {
-      console.log(deleteCountData.status, deleteCountData.statusText);
-    }
-    expect(deleteCountData.status).toBe(200);
+    expect(Array.isArray(deleteCountData)).toBe(true);
   });
 
   test("Active connections count must return a 200 response.", async () => {
-    const activeConnectionsCountData = await firestoreMetrics.getFirestoreActiveConnections(
-      "2023-07-22T08:00:00Z",
-      "2023-07-22T22:42:15Z"
-    );
-    // API will respond with 403 when billing is not enabled on the project.
-    if (activeConnectionsCountData.status === 403) {
-      console.log(activeConnectionsCountData.status, activeConnectionsCountData.statusText);
-    }
-    expect(activeConnectionsCountData.status).toBe(200);
+    const activeConnectionsCountData =
+      await firestoreMetrics.getFirestoreActiveConnections(
+        "2023-07-22T08:00:00Z",
+        "2023-07-22T22:42:15Z"
+      );
+    expect(Array.isArray(activeConnectionsCountData)).toBe(true);
   });
 
   test("Snapshot listener count must return a 200 response.", async () => {
-    const snapshotListenerCountData = await firestoreMetrics.getFirestoreSnapshotListeners(
-      "2023-07-22T08:00:00Z",
-      "2023-07-22T22:42:15Z"
-    );
-    // API will respond with 403 when billing is not enabled on the project.
-    if (snapshotListenerCountData.status === 403) {
-      console.log(snapshotListenerCountData.status, snapshotListenerCountData.statusText);
-    }
-    expect(snapshotListenerCountData.status).toBe(200);
+    const snapshotListenerCountData =
+      await firestoreMetrics.getFirestoreSnapshotListeners(
+        "2023-07-22T08:00:00Z",
+        "2023-07-22T22:42:15Z"
+      );
+    expect(Array.isArray(snapshotListenerCountData)).toBe(true);
   });
 });

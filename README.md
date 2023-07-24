@@ -16,7 +16,7 @@ This is a library which uses the [Cloud Monitoring API v3](https://cloud.google.
 1. Pass the path to the service account in `FirestoreMetrics`
 
 ```js
-import { FirestoreMetrics } from "../firestore-metrics";
+import { FirestoreMetrics } from "firestore-metrics";
 
 async function testApi() {
   const firestoreMetrics = new FirestoreMetrics({

@@ -4,16 +4,20 @@ This is a library which uses the [Cloud Monitoring API v3](https://cloud.google.
 
 ## Pre-requisites
 
-1. Service account with permission to access the API.
+1. A service account with permission to access the API.
    1. `Viewer` role should suffice.
 1. Project must be billing enabled.
    1. This might be more of a bug as requests that use the bearer token obtained from a service account results in a 403 error when the project is not billing enabled.
 
 ## How to use
 
-1. Create a service account
-1. Download the service account credentials
-1. Pass the path to the service account in `FirestoreMetrics`
+1. Create a service account.
+   1. Follow steps here to [create a service account](https://cloud.google.com/iam/docs/service-accounts-create#creating).
+   1. Select the `Console` tab.
+   1. When selecting a role, under `Quick access` > `Basic`, pick  `Viewer`.
+1. Download the service account keys.
+   1. Follow the steps here to [download the service account key](https://cloud.google.com/iam/docs/keys-create-delete#creating). 
+1. Pass the path to the service account key file in `FirestoreMetrics`
 
 ```js
 import { FirestoreMetrics } from "firestore-metrics";

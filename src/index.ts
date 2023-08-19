@@ -1,5 +1,52 @@
-import { GoogleAuth } from "google-auth-library";
+import {
+  AuthClient,
+  ExternalAccountClientOptions,
+  GoogleAuth,
+  GoogleAuthOptions,
+  ImpersonatedOptions,
+  JWTOptions,
+  OAuth2ClientOptions,
+  UserRefreshClientOptions,
+} from "google-auth-library";
 import { JSONClient } from "google-auth-library/build/src/auth/googleauth";
+
+interface CredentialBody {
+  client_email?: string;
+  private_key?: string;
+  [key: string]: any;
+}
+
+interface FirestoreMetricsArgs<T extends AuthClient = JSONClient> {
+  /**
+   * Your project id.
+   */
+  projectId?: string;
+  /**
+   * An `AuthClient` to use
+   */
+  authClient?: T;
+  /**
+   * Path to a .json, .pem, or .p12 key file
+   */
+  keyFilename?: string;
+  /**
+   * Path to a .json, .pem, or .p12 key file
+   */
+  keyFile?: string;
+  /**
+   * Object containing client_email and private_key properties, or the
+   * external account client options.
+   */
+  credentials?: CredentialBody | ExternalAccountClientOptions;
+  /**
+   * Options object passed to the constructor of the client
+   */
+  clientOptions?:
+    | JWTOptions
+    | OAuth2ClientOptions
+    | UserRefreshClientOptions
+    | ImpersonatedOptions;
+}
 
 interface TimeSeriesResponse {
   timeSeries: Array<TimeSeries>;
@@ -44,10 +91,10 @@ export type DateTimeStringISO =
   `${number}-${number}-${number}T${number}:${number}:${number}Z`;
 
 export class FirestoreMetrics {
-  serviceAccountPath: string;
-  projectId: string;
-  accessToken: string | null = null;
-  private googleAuth: GoogleAuth<JSONClient>;
+  projectId: string | null = null;
+  private accessToken: string | null = null;
+  private googleAuth: GoogleAuth | null = null;
+  private googleAuthArgs: GoogleAuthOptions;
   private baseUrl = "https://monitoring.googleapis.com/v3/projects";
   private scopes: Array<string> = [
     "https://www.googleapis.com/auth/cloud-platform",
@@ -55,8 +102,17 @@ export class FirestoreMetrics {
     "https://www.googleapis.com/auth/monitoring.read",
   ];
 
-  constructor({ serviceAccountPath, projectId = null }: ProjectConfigs) {
-    this.serviceAccountPath = serviceAccountPath;
+  constructor({
+    projectId,
+    keyFilename,
+    keyFile,
+    credentials,
+  }: FirestoreMetricsArgs) {
+    this.googleAuthArgs = {
+      keyFilename,
+      keyFile,
+      credentials,
+    };
     this.projectId = projectId;
   }
 
@@ -71,9 +127,22 @@ export class FirestoreMetrics {
   }
 
   /**
+   * Creates a Google Auth instance if null.
+   */
+  private createGoogleAuthInstance() {
+    if (this.googleAuth === null) {
+      this.googleAuth = new GoogleAuth({
+        ...this.googleAuthArgs,
+        scopes: this.scopes,
+      });
+    }
+  }
+
+  /**
    * Gets the project ID if is it still null.
    */
   async getProjectId(): Promise<string> {
+    this.createGoogleAuthInstance();
     this.projectId = this.projectId || (await this.googleAuth.getProjectId());
     return this.projectId;
   }
@@ -83,14 +152,13 @@ export class FirestoreMetrics {
    * @returns {Promise<string>} Access token used to authenticate requests.
    */
   async generateToken(): Promise<string> {
-    this.googleAuth = new GoogleAuth({
-      keyFile: this.serviceAccountPath,
-      scopes: this.scopes,
-    });
+    if (this.accessToken === null) {
+      this.createGoogleAuthInstance();
+      this.accessToken = await this.googleAuth.getAccessToken();
+    }
 
+    // Makes sure that the project id is always loaded before being used.
     await this.getProjectId();
-    this.accessToken =
-      this.accessToken || (await this.googleAuth.getAccessToken());
     return this.accessToken;
   }
 
@@ -118,7 +186,7 @@ export class FirestoreMetrics {
       body: null,
       method: "GET",
     });
-    
+
     if (response.status !== 200) {
       const errMesage = await response.text();
       throw Error(errMesage);

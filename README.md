@@ -14,10 +14,10 @@ This is a library which uses the [Cloud Monitoring API v3](https://cloud.google.
 1. Create a service account.
    1. Follow steps here to [create a service account](https://cloud.google.com/iam/docs/service-accounts-create#creating).
    1. Select the `Console` tab.
-   1. When selecting a role, under `Quick access` > `Basic`, pick  `Viewer`.
+   1. When selecting a role, under `Quick access` > `Basic`, pick `Viewer`.
 1. Download the service account keys.
-   1. Follow the steps here to [download the service account key](https://cloud.google.com/iam/docs/keys-create-delete#creating). 
-1. Pass the path to the service account key file in `FirestoreMetrics`
+   1. Follow the steps here to [download the service account key](https://cloud.google.com/iam/docs/keys-create-delete#creating).
+1. Pass the service-account key file path or service-account credentials to `FirestoreMetrics`
 
 ```js
 import { FirestoreMetrics } from "firestore-metrics";
@@ -91,4 +91,38 @@ Output would look like:
     "count": 14
   }
 ]
+```
+
+## Ways to authenticate request
+
+### Using a service-account file
+
+Just provide the path to your `service-account` file
+
+```js
+const firestoreMetrics = new FirestoreMetrics({
+  serviceAccountPath: "./service-account.json",
+});
+```
+
+### Using service-account credentials
+
+Just provide the JSON object of your `service-account` credentials
+
+```js
+const firestoreMetrics = new FirestoreMetrics({
+  credentials: {
+    type: "service_account",
+    project_id: "<PROJECT_ID>",
+    private_key_id: "<PRIVATE_KEY_ID>",
+    private_key: "<PRIVATE_KEY>",
+    client_email: "<CLIENT_EMAIL>",
+    client_id: "<CLIENT_ID>",
+    auth_uri: "<AUTH_URI>",
+    token_uri: "<TOKEN_URI>",
+    auth_provider_x509_cert_url: "<AUTH_PROVIDER_X509_CERT_URL>",
+    client_x509_cert_url: "<CLIENT_X509_CERT_URL>",
+    universe_domain: "<UNIVERSE_DOMAIN>",
+  },
+});
 ```

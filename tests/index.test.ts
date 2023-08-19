@@ -18,7 +18,7 @@ describe("testing index file", () => {
   }
 
   const firestoreMetrics = new FirestoreMetrics({
-    serviceAccountPath: pathToServiceAccount,
+    keyFile: pathToServiceAccount,
   });
 
   beforeAll(async () => {

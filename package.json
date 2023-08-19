@@ -1,6 +1,6 @@
 {
   "name": "firestore-metrics",
-  "version": "1.0.6",
+  "version": "1.0.8",
   "description": "A library which uses the Cloud Monitoring API v3 to view Firestore metrics.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

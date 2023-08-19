@@ -1,5 +1,7 @@
-service-account.json
+# Local testing
 .private
+service-account.json
 
+# Output and dependencies
 node_modules
 dist/

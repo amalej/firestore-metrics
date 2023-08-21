@@ -61,7 +61,7 @@ interface Metric {
   labels: {
     module: "__unknown__";
     version: "__unknown__";
-    [key: string]: string;
+    [key: string]: string; // loosely typed because there is no definite keys.
   };
 }
 
@@ -78,9 +78,9 @@ export interface Interval {
 }
 
 export interface TimeIntervalMetric {
-  operation?: string;
   interval: Interval;
   count: number;
+  [key: string]: any; // loosely typed because there is no definite keys.
 }
 
 export type DateTimeStringISO =
@@ -202,6 +202,36 @@ export class FirestoreMetrics {
   }
 
   /**
+   * Check if the list contains an the object.
+   * @param obj Object.
+   * @param list List of objects.
+   * @returns True if the list contains the object.
+   */
+  private containsObject(obj: Object, list: Array<Object>) {
+    if (JSON.stringify(list).includes(JSON.stringify(obj))) {
+      return true;
+    }
+
+    return false;
+  }
+
+  /**
+   * Removes keys in an object with null, undefined, etc. value.
+   * @param obj Object.
+   * @param args Additional values to be removes.
+   * @returns An object with keys with invalid values removed.
+   */
+  private cleanObject(obj: Object, ...args: any[]) {
+    const invalidValues = [null, undefined, ...args];
+    for (let propName in obj) {
+      if (invalidValues.includes(obj[propName])) {
+        delete obj[propName];
+      }
+    }
+    return obj;
+  }
+
+  /**
    * Cleans/formats the response into something more understandable.
    * @param {Response} response Fetch response.
    * @returns {Promise<Array<TimeIntervalMetric>>} An array of time intervals and count of transactions for that time.
@@ -219,13 +249,20 @@ export class FirestoreMetrics {
     for (let timeSeries of timeSeriesResponse.timeSeries) {
       for (let point of timeSeries.points) {
         if (point.value.int64Value !== "0") {
+          const labels = this.cleanObject(
+            timeSeries.metric.labels,
+            "__unknown__",
+            ""
+          );
           const pointMetric: TimeIntervalMetric = {
-            operation:
-              timeSeries.metric.labels.type || timeSeries.metric.labels.op,
+            ...labels,
             interval: point.interval,
             count: parseInt(point.value.int64Value),
           };
-          cleanTimeSeries.push(pointMetric);
+
+          if (!this.containsObject(pointMetric, cleanTimeSeries)) {
+            cleanTimeSeries.push(pointMetric);
+          }
         }
       }
     }
@@ -240,7 +277,7 @@ export class FirestoreMetrics {
    * @param {string?} accessToken Access token used to authenticate.
    * @returns {Promise<Array<TimeIntervalMetric>>}
    */
-  async getFirestoreReadCount(
+  async getReadCount(
     startTime: DateTimeStringISO,
     endTime: DateTimeStringISO,
     accessToken: string | null = null
@@ -261,7 +298,7 @@ export class FirestoreMetrics {
    * @param {string?} accessToken Access token used to authenticate.
    * @returns {Promise<Array<TimeIntervalMetric>>}
    */
-  async getFirestoreWriteCount(
+  async getWriteCount(
     startTime: DateTimeStringISO,
     endTime: DateTimeStringISO,
     accessToken: string | null = null
@@ -282,7 +319,7 @@ export class FirestoreMetrics {
    * @param {string?} accessToken Access token used to authenticate.
    * @returns {Promise<Array<TimeIntervalMetric>>}
    */
-  async getFirestoreDeleteCount(
+  async getDeleteCount(
     startTime: DateTimeStringISO,
     endTime: DateTimeStringISO,
     accessToken: string | null = null
@@ -303,7 +340,7 @@ export class FirestoreMetrics {
    * @param {string?} accessToken Access token used to authenticate.
    * @returns {Promise<Array<TimeIntervalMetric>>}
    */
-  async getFirestoreSnapshotListeners(
+  async getSnapshotListeners(
     startTime: DateTimeStringISO,
     endTime: DateTimeStringISO,
     accessToken: string | null = null
@@ -324,7 +361,7 @@ export class FirestoreMetrics {
    * @param {string?} accessToken Access token used to authenticate.
    * @returns {Promise<Array<TimeIntervalMetric>>}
    */
-  async getFirestoreActiveConnections(
+  async getActiveConnections(
     startTime: DateTimeStringISO,
     endTime: DateTimeStringISO,
     accessToken: string | null = null
@@ -333,6 +370,69 @@ export class FirestoreMetrics {
       await this.generateToken(false);
     }
     const filter = this.metricFilter("network/active_connections");
+    const res = await this.makeRequest(filter, startTime, endTime);
+    const cleanTimeSeries = await this.cleanResponseTimeSeries(res);
+    return cleanTimeSeries;
+  }
+
+  /**
+   * Get Firestore documents deleted by TTL services count.
+   * @param {DateTimeStringISO} startTime The beginning of the time interval.
+   * @param {DateTimeStringISO} endTime The end of the time interval.
+   * @param {string?} accessToken Access token used to authenticate.
+   * @returns {Promise<Array<TimeIntervalMetric>>}
+   */
+  async getTTLDeletionCount(
+    startTime: DateTimeStringISO,
+    endTime: DateTimeStringISO,
+    accessToken: string | null = null
+  ): Promise<Array<TimeIntervalMetric>> {
+    if (accessToken === null) {
+      await this.generateToken(false);
+    }
+    const filter = this.metricFilter("document/ttl_deletion_count");
+    const res = await this.makeRequest(filter, startTime, endTime);
+    const cleanTimeSeries = await this.cleanResponseTimeSeries(res);
+    return cleanTimeSeries;
+  }
+
+  /**
+   * Get Firestore Security Rule evaluations count performed in response to write read requests.
+   * @param {DateTimeStringISO} startTime The beginning of the time interval.
+   * @param {DateTimeStringISO} endTime The end of the time interval.
+   * @param {string?} accessToken Access token used to authenticate.
+   * @returns {Promise<Array<TimeIntervalMetric>>}
+   */
+  async getRulesEvaluationCount(
+    startTime: DateTimeStringISO,
+    endTime: DateTimeStringISO,
+    accessToken: string | null = null
+  ): Promise<Array<TimeIntervalMetric>> {
+    if (accessToken === null) {
+      await this.generateToken(false);
+    }
+    const filter = this.metricFilter("rules/evaluation_count");
+    const res = await this.makeRequest(filter, startTime, endTime);
+    const cleanTimeSeries = await this.cleanResponseTimeSeries(res);
+    return cleanTimeSeries;
+  }
+
+  /**
+   * Get Firestore API calls count.
+   * @param {DateTimeStringISO} startTime The beginning of the time interval.
+   * @param {DateTimeStringISO} endTime The end of the time interval.
+   * @param {string?} accessToken Access token used to authenticate.
+   * @returns {Promise<Array<TimeIntervalMetric>>}
+   */
+  async getRequestCount(
+    startTime: DateTimeStringISO,
+    endTime: DateTimeStringISO,
+    accessToken: string | null = null
+  ): Promise<Array<TimeIntervalMetric>> {
+    if (accessToken === null) {
+      await this.generateToken(false);
+    }
+    const filter = this.metricFilter("api/request_count");
     const res = await this.makeRequest(filter, startTime, endTime);
     const cleanTimeSeries = await this.cleanResponseTimeSeries(res);
     return cleanTimeSeries;

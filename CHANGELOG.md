@@ -4,8 +4,12 @@
 - Added way to overwrite access token via `generateToken(true)` method.
   - Set the `overwriteExisting` argument to `true` to overwrite access token.
 - Modified output to also include the operation made by the metric
-  - Read metrics will now specify whether the operation was a `QUERY` or `LOOKUP`
-  - Write metrics will now specify whether the operation was a `CREATE` or `UPDATE`
+  - Read metrics will now specify whether the `type` was a `QUERY` or `LOOKUP`
+  - Write metrics will now specify whether the `op` was a `CREATE` or `UPDATE`
+- Added the following methods
+  - getRequestCount()
+  - getTTLDeletionCount()
+  - getRulesEvaluationCount()
 
 # v1.0.8
 

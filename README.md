@@ -24,11 +24,14 @@ This is a library which uses the [Cloud Monitoring API v3](https://cloud.google.
 <div>
   Usage metrics
   <ul>
-    <li>getFirestoreReadCount() - Get Firestore read count metrics</li>
-    <li>getFirestoreWriteCount() - Get Firestore write count metrics</li>
-    <li>getFirestoreDeleteCount() - Get Firestore delete count metrics</li>
-    <li>getFirestoreSnapshotListeners() - Get Firestore snapshot listeners count metrics</li>
-    <li>getFirestoreActiveConnections() - Get Firestore active connections count metrics</li>
+    <li>getRequestCount() - Get Firestore API calls count</li>
+    <li>getReadCount() - Get Firestore read count metrics</li>
+    <li>getWriteCount() - Get Firestore write count metrics</li>
+    <li>getDeleteCount() - Get Firestore delete count metrics</li>
+    <li>getSnapshotListeners() - Get Firestore snapshot listeners count metrics</li>
+    <li>getActiveConnections() - Get Firestore active connections count metrics</li>
+    <li>getTTLDeletionCount() - Get Firestore documents deleted by TTL services count</li>
+    <li>getRulesEvaluationCount() - Get Firestore Security Rule evaluations count performed in response to write read requests</li>
   </ul>
 </div>
 
@@ -50,7 +53,7 @@ async function testApi() {
   const firestoreMetrics = new FirestoreMetrics({
     serviceAccountPath: "./service-account.json",
   });
-  const readUsage = await firestoreMetrics.getFirestoreReadCount(
+  const readUsage = await firestoreMetrics.getReadCount(
     "2023-07-22T08:00:00Z",
     "2023-07-22T22:42:15Z"
   );
@@ -66,7 +69,7 @@ Output would look like:
 ```json
 [
   {
-    "operation": "QUERY",
+    "type": "QUERY",
     "interval": {
       "startTime": "2023-08-21T16:15:00Z",
       "endTime": "2023-08-21T16:16:00Z"
@@ -74,7 +77,7 @@ Output would look like:
     "count": 26
   },
   {
-    "operation": "QUERY",
+    "type": "QUERY",
     "interval": {
       "startTime": "2023-08-21T16:14:00Z",
       "endTime": "2023-08-21T16:15:00Z"
@@ -82,7 +85,7 @@ Output would look like:
     "count": 15
   },
   {
-    "operation": "QUERY",
+    "type": "QUERY",
     "interval": {
       "startTime": "2023-08-21T15:51:00Z",
       "endTime": "2023-08-21T15:52:00Z"
@@ -101,9 +104,9 @@ async function testApi() {
   const firestoreMetrics = new FirestoreMetrics({
     serviceAccountPath: "./service-account.json",
   });
-  const writeUsage = await firestoreMetrics.getFirestoreWriteCount(
-    "2023-07-22T08:00:00Z",
-    "2023-07-22T22:42:15Z"
+  const writeUsage = await firestoreMetrics.getWriteCount(
+    "2023-08-21T15:00:00Z",
+    "2023-08-21T20:00:00Z"
   );
 
   console.log(JSON.stringify(writeUsage, null, 4));
@@ -117,7 +120,7 @@ Output would look like:
 ```json
 [
   {
-    "operation": "CREATE",
+    "op": "CREATE",
     "interval": {
       "startTime": "2023-08-21T16:09:00Z",
       "endTime": "2023-08-21T16:10:00Z"
@@ -125,7 +128,7 @@ Output would look like:
     "count": 1
   },
   {
-    "operation": "UPDATE",
+    "op": "UPDATE",
     "interval": {
       "startTime": "2023-08-21T16:15:00Z",
       "endTime": "2023-08-21T16:16:00Z"
@@ -133,7 +136,7 @@ Output would look like:
     "count": 1
   },
   {
-    "operation": "UPDATE",
+    "op": "UPDATE",
     "interval": {
       "startTime": "2023-08-21T16:09:00Z",
       "endTime": "2023-08-21T16:10:00Z"

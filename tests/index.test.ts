@@ -27,7 +27,7 @@ describe("testing index file", () => {
   });
 
   test("Read Firestore count must return a 200 response.", async () => {
-    const readCountData = await firestoreMetrics.getFirestoreReadCount(
+    const readCountData = await firestoreMetrics.getReadCount(
       "2023-07-22T08:00:00Z",
       "2023-07-22T22:42:15Z"
     );
@@ -35,7 +35,7 @@ describe("testing index file", () => {
   });
 
   test("Write Firestore count must return a 200 response.", async () => {
-    const writeCountData = await firestoreMetrics.getFirestoreWriteCount(
+    const writeCountData = await firestoreMetrics.getWriteCount(
       "2023-07-22T08:00:00Z",
       "2023-07-22T22:42:15Z"
     );
@@ -43,7 +43,7 @@ describe("testing index file", () => {
   });
 
   test("Delete Firestore count must return a 200 response.", async () => {
-    const deleteCountData = await firestoreMetrics.getFirestoreDeleteCount(
+    const deleteCountData = await firestoreMetrics.getDeleteCount(
       "2023-07-22T08:00:00Z",
       "2023-07-22T22:42:15Z"
     );
@@ -52,7 +52,7 @@ describe("testing index file", () => {
 
   test("Active connections count must return a 200 response.", async () => {
     const activeConnectionsCountData =
-      await firestoreMetrics.getFirestoreActiveConnections(
+      await firestoreMetrics.getActiveConnections(
         "2023-07-22T08:00:00Z",
         "2023-07-22T22:42:15Z"
       );
@@ -61,7 +61,7 @@ describe("testing index file", () => {
 
   test("Snapshot listener count must return a 200 response.", async () => {
     const snapshotListenerCountData =
-      await firestoreMetrics.getFirestoreSnapshotListeners(
+      await firestoreMetrics.getSnapshotListeners(
         "2023-07-22T08:00:00Z",
         "2023-07-22T22:42:15Z"
       );

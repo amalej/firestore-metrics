@@ -59,7 +59,9 @@ interface TimeSeries {
 
 interface Metric {
   labels: {
-    type: MetricType;
+    module: "__unknown__";
+    version: "__unknown__";
+    [key: string]: string;
   };
 }
 
@@ -76,16 +78,10 @@ export interface Interval {
 }
 
 export interface TimeIntervalMetric {
+  operation?: string;
   interval: Interval;
   count: number;
 }
-
-interface ProjectConfigs {
-  serviceAccountPath: string;
-  projectId?: string | null;
-}
-
-type MetricType = "QUERY" | "LOOK_UP" | string;
 
 export type DateTimeStringISO =
   `${number}-${number}-${number}T${number}:${number}:${number}Z`;
@@ -139,7 +135,7 @@ export class FirestoreMetrics {
   }
 
   /**
-   * Gets the project ID if is it still null.
+   * Gets the project ID and sets its value if it is still null.
    */
   async getProjectId(): Promise<string> {
     this.createGoogleAuthInstance();
@@ -149,10 +145,11 @@ export class FirestoreMetrics {
 
   /**
    * Generates an access token.
+   * @param {boolean} overwriteExisting If true, overwrites the existing access token.
    * @returns {Promise<string>} Access token used to authenticate requests.
    */
-  async generateToken(): Promise<string> {
-    if (this.accessToken === null) {
+  async generateToken(overwriteExisting: boolean = true): Promise<string> {
+    if (this.accessToken === null || overwriteExisting === true) {
       this.createGoogleAuthInstance();
       this.accessToken = await this.googleAuth.getAccessToken();
     }
@@ -160,6 +157,15 @@ export class FirestoreMetrics {
     // Makes sure that the project id is always loaded before being used.
     await this.getProjectId();
     return this.accessToken;
+  }
+
+  /**
+   * Sets the access token.
+   * @param {boolean} accessToken Value of the new access token.
+   */
+  setAccessToken(accessToken: string) {
+    this.accessToken = accessToken;
+    return;
   }
 
   /**
@@ -204,7 +210,6 @@ export class FirestoreMetrics {
     response: Response
   ): Promise<Array<TimeIntervalMetric>> {
     const cleanTimeSeries: Array<TimeIntervalMetric> = [];
-    const startTimes: Array<string> = [];
     const responseContent = await response.text();
     const timeSeriesResponse: TimeSeriesResponse = JSON.parse(responseContent);
     if (timeSeriesResponse.timeSeries === undefined) {
@@ -214,14 +219,12 @@ export class FirestoreMetrics {
     for (let timeSeries of timeSeriesResponse.timeSeries) {
       for (let point of timeSeries.points) {
         if (point.value.int64Value !== "0") {
-          if (startTimes.includes(point.interval.startTime)) {
-            continue;
-          }
           const pointMetric: TimeIntervalMetric = {
+            operation:
+              timeSeries.metric.labels.type || timeSeries.metric.labels.op,
             interval: point.interval,
             count: parseInt(point.value.int64Value),
           };
-          startTimes.push(pointMetric.interval.startTime);
           cleanTimeSeries.push(pointMetric);
         }
       }
@@ -243,7 +246,7 @@ export class FirestoreMetrics {
     accessToken: string | null = null
   ): Promise<Array<TimeIntervalMetric>> {
     if (accessToken === null) {
-      await this.generateToken();
+      await this.generateToken(false);
     }
     const filter = this.metricFilter("document/read_count");
     const res = await this.makeRequest(filter, startTime, endTime);
@@ -264,7 +267,7 @@ export class FirestoreMetrics {
     accessToken: string | null = null
   ): Promise<Array<TimeIntervalMetric>> {
     if (accessToken === null) {
-      await this.generateToken();
+      await this.generateToken(false);
     }
     const filter = this.metricFilter("document/write_count");
     const res = await this.makeRequest(filter, startTime, endTime);
@@ -285,7 +288,7 @@ export class FirestoreMetrics {
     accessToken: string | null = null
   ): Promise<Array<TimeIntervalMetric>> {
     if (accessToken === null) {
-      await this.generateToken();
+      await this.generateToken(false);
     }
     const filter = this.metricFilter("document/delete_count");
     const res = await this.makeRequest(filter, startTime, endTime);
@@ -306,7 +309,7 @@ export class FirestoreMetrics {
     accessToken: string | null = null
   ): Promise<Array<TimeIntervalMetric>> {
     if (accessToken === null) {
-      await this.generateToken();
+      await this.generateToken(false);
     }
     const filter = this.metricFilter("network/snapshot_listeners");
     const res = await this.makeRequest(filter, startTime, endTime);
@@ -327,7 +330,7 @@ export class FirestoreMetrics {
     accessToken: string | null = null
   ): Promise<Array<TimeIntervalMetric>> {
     if (accessToken === null) {
-      await this.generateToken();
+      await this.generateToken(false);
     }
     const filter = this.metricFilter("network/active_connections");
     const res = await this.makeRequest(filter, startTime, endTime);

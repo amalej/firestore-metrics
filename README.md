@@ -19,6 +19,30 @@ This is a library which uses the [Cloud Monitoring API v3](https://cloud.google.
    1. Follow the steps here to [download the service account key](https://cloud.google.com/iam/docs/keys-create-delete#creating).
 1. Pass the service-account key file path or service-account credentials to `FirestoreMetrics`
 
+## Method references
+
+<div>
+  Usage metrics
+  <ul>
+    <li>getFirestoreReadCount() - Get Firestore read count metrics</li>
+    <li>getFirestoreWriteCount() - Get Firestore write count metrics</li>
+    <li>getFirestoreDeleteCount() - Get Firestore delete count metrics</li>
+    <li>getFirestoreSnapshotListeners() - Get Firestore snapshot listeners count metrics</li>
+    <li>getFirestoreActiveConnections() - Get Firestore active connections count metrics</li>
+  </ul>
+</div>
+
+<div>
+  Misc.
+  <ul>
+    <li>getProjectId() - Gets the project ID and sets its value if it is still null</li>
+    <li>generateToken() - Generate an access token to be used to authenticate requests</li>
+    <li>setAccessToken() - Overwrites the access token used to authenticate requests</li>
+  </ul>
+</div>
+
+### Get read metrics
+
 ```js
 import { FirestoreMetrics } from "firestore-metrics";
 
@@ -31,7 +55,7 @@ async function testApi() {
     "2023-07-22T22:42:15Z"
   );
 
-  console.log(JSON.stringify(readUsage));
+  console.log(JSON.stringify(readUsage, null, 4));
 }
 
 testApi();
@@ -42,53 +66,79 @@ Output would look like:
 ```json
 [
   {
+    "operation": "QUERY",
     "interval": {
-      "startTime": "2023-07-22T21:37:00Z",
-      "endTime": "2023-07-22T21:38:00Z"
+      "startTime": "2023-08-21T16:15:00Z",
+      "endTime": "2023-08-21T16:16:00Z"
     },
-    "count": 48
+    "count": 26
   },
   {
+    "operation": "QUERY",
     "interval": {
-      "startTime": "2023-07-22T21:36:00Z",
-      "endTime": "2023-07-22T21:37:00Z"
+      "startTime": "2023-08-21T16:14:00Z",
+      "endTime": "2023-08-21T16:15:00Z"
     },
-    "count": 25
+    "count": 15
   },
   {
+    "operation": "QUERY",
     "interval": {
-      "startTime": "2023-07-22T20:48:00Z",
-      "endTime": "2023-07-22T20:49:00Z"
-    },
-    "count": 7
-  },
-  {
-    "interval": {
-      "startTime": "2023-07-22T20:47:00Z",
-      "endTime": "2023-07-22T20:48:00Z"
-    },
-    "count": 28
-  },
-  {
-    "interval": {
-      "startTime": "2023-07-22T16:04:00Z",
-      "endTime": "2023-07-22T16:05:00Z"
-    },
-    "count": 3
-  },
-  {
-    "interval": {
-      "startTime": "2023-07-22T16:03:00Z",
-      "endTime": "2023-07-22T16:04:00Z"
+      "startTime": "2023-08-21T15:51:00Z",
+      "endTime": "2023-08-21T15:52:00Z"
     },
     "count": 11
+  }
+]
+```
+
+### Get write metrics
+
+```js
+import { FirestoreMetrics } from "firestore-metrics";
+
+async function testApi() {
+  const firestoreMetrics = new FirestoreMetrics({
+    serviceAccountPath: "./service-account.json",
+  });
+  const writeUsage = await firestoreMetrics.getFirestoreWriteCount(
+    "2023-07-22T08:00:00Z",
+    "2023-07-22T22:42:15Z"
+  );
+
+  console.log(JSON.stringify(writeUsage, null, 4));
+}
+
+testApi();
+```
+
+Output would look like:
+
+```json
+[
+  {
+    "operation": "CREATE",
+    "interval": {
+      "startTime": "2023-08-21T16:09:00Z",
+      "endTime": "2023-08-21T16:10:00Z"
+    },
+    "count": 1
   },
   {
+    "operation": "UPDATE",
     "interval": {
-      "startTime": "2023-07-22T08:15:00Z",
-      "endTime": "2023-07-22T08:16:00Z"
+      "startTime": "2023-08-21T16:15:00Z",
+      "endTime": "2023-08-21T16:16:00Z"
     },
-    "count": 14
+    "count": 1
+  },
+  {
+    "operation": "UPDATE",
+    "interval": {
+      "startTime": "2023-08-21T16:09:00Z",
+      "endTime": "2023-08-21T16:10:00Z"
+    },
+    "count": 1
   }
 ]
 ```

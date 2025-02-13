@@ -2,8 +2,8 @@
   "name": "firestore-metrics",
   "version": "1.0.9",
   "description": "A library which uses the Cloud Monitoring API v3 to view Firestore metrics.",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
   "repository": {
     "type": "git",
     "url": "https://github.com/amalej/firestore-metrics"
@@ -15,7 +15,7 @@
     "deploy": "npm run build && npm publish"
   },
   "files": [
-    "dist"
+    "lib"
   ],
   "keywords": [
     "Firestore Usage",

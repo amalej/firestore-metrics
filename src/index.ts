@@ -217,7 +217,10 @@ export class FirestoreMetrics {
           );
           const pointMetric: TimeIntervalMetric = {
             ...labels,
-            interval: point.interval,
+            interval: {
+              endTime: point.interval.endTime,
+              startTime: point.interval.startTime,
+            },
             count: parseInt(point.value.int64Value),
           };
 

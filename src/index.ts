@@ -16,38 +16,6 @@ interface CredentialBody {
   [key: string]: any;
 }
 
-interface FirestoreMetricsArgs<T extends AuthClient = JSONClient> {
-  /**
-   * Your project id.
-   */
-  projectId?: string;
-  /**
-   * An `AuthClient` to use
-   */
-  authClient?: T;
-  /**
-   * Path to a .json, .pem, or .p12 key file
-   */
-  keyFilename?: string;
-  /**
-   * Path to a .json, .pem, or .p12 key file
-   */
-  keyFile?: string;
-  /**
-   * Object containing client_email and private_key properties, or the
-   * external account client options.
-   */
-  credentials?: CredentialBody | ExternalAccountClientOptions;
-  /**
-   * Options object passed to the constructor of the client
-   */
-  clientOptions?:
-    | JWTOptions
-    | OAuth2ClientOptions
-    | UserRefreshClientOptions
-    | ImpersonatedOptions;
-}
-
 interface TimeSeriesResponse {
   timeSeries: Array<TimeSeries>;
 }
@@ -86,6 +54,10 @@ export interface TimeIntervalMetric {
 export type DateTimeStringISO =
   `${number}-${number}-${number}T${number}:${number}:${number}Z`;
 
+interface FirestoreMetricsArgs extends GoogleAuthOptions {
+  projectId: string;
+}
+
 export class FirestoreMetrics {
   projectId: string | null = null;
   private accessToken: string | null = null;
@@ -98,18 +70,9 @@ export class FirestoreMetrics {
     "https://www.googleapis.com/auth/monitoring.read",
   ];
 
-  constructor({
-    projectId,
-    keyFilename,
-    keyFile,
-    credentials,
-  }: FirestoreMetricsArgs) {
-    this.googleAuthArgs = {
-      keyFilename,
-      keyFile,
-      credentials,
-    };
-    this.projectId = projectId;
+  constructor(params: FirestoreMetricsArgs) {
+    this.googleAuthArgs = { ...params };
+    this.projectId = params.projectId;
   }
 
   /**

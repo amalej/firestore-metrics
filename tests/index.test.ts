@@ -28,8 +28,8 @@ describe("testing index file", () => {
 
   test("Read Firestore count must return a 200 response.", async () => {
     const readCountData = await firestoreMetrics.getReadCount(
-      "2023-07-22T08:00:00Z",
-      "2023-07-22T22:42:15Z"
+      "2025-02-17T08:00:00Z",
+      "2025-02-19T08:00:00Z"
     );
     expect(Array.isArray(readCountData)).toBe(true);
   });

@@ -51,7 +51,8 @@ import { FirestoreMetrics } from "firestore-metrics";
 
 async function testApi() {
   const firestoreMetrics = new FirestoreMetrics({
-    serviceAccountPath: "./service-account.json",
+    projectId: "PROJECT_ID",
+    keyFile: "./service-account.json",
   });
   const readUsage = await firestoreMetrics.getReadCount(
     "2023-07-22T08:00:00Z",
@@ -102,7 +103,8 @@ import { FirestoreMetrics } from "firestore-metrics";
 
 async function testApi() {
   const firestoreMetrics = new FirestoreMetrics({
-    serviceAccountPath: "./service-account.json",
+    projectId: "PROJECT_ID",
+    keyFile: "./service-account.json",
   });
   const writeUsage = await firestoreMetrics.getWriteCount(
     "2023-08-21T15:00:00Z",
@@ -154,28 +156,7 @@ Just provide the path to your `service-account` file
 
 ```js
 const firestoreMetrics = new FirestoreMetrics({
-  serviceAccountPath: "./service-account.json",
-});
-```
-
-### Using service-account credentials
-
-Just provide the JSON object of your `service-account` credentials
-
-```js
-const firestoreMetrics = new FirestoreMetrics({
-  credentials: {
-    type: "service_account",
-    project_id: "<PROJECT_ID>",
-    private_key_id: "<PRIVATE_KEY_ID>",
-    private_key: "<PRIVATE_KEY>",
-    client_email: "<CLIENT_EMAIL>",
-    client_id: "<CLIENT_ID>",
-    auth_uri: "<AUTH_URI>",
-    token_uri: "<TOKEN_URI>",
-    auth_provider_x509_cert_url: "<AUTH_PROVIDER_X509_CERT_URL>",
-    client_x509_cert_url: "<CLIENT_X509_CERT_URL>",
-    universe_domain: "<UNIVERSE_DOMAIN>",
-  },
+  projectId: "PROJECT_ID",
+  keyFile: "./service-account.json",
 });
 ```

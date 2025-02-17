@@ -54,9 +54,7 @@ export interface TimeIntervalMetric {
 export type DateTimeStringISO =
   `${number}-${number}-${number}T${number}:${number}:${number}Z`;
 
-interface FirestoreMetricsArgs extends GoogleAuthOptions {
-  projectId: string;
-}
+interface FirestoreMetricsArgs extends Omit<GoogleAuthOptions, "scopes"> {}
 
 export class FirestoreMetrics {
   projectId: string | null = null;
@@ -72,7 +70,7 @@ export class FirestoreMetrics {
 
   constructor(params: FirestoreMetricsArgs) {
     this.googleAuthArgs = { ...params };
-    this.projectId = params.projectId;
+    this.projectId = params.projectId ?? null;
   }
 
   /**
